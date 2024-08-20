@@ -1,6 +1,7 @@
 import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
+import { upload } from "./middlewares/multer.middleware.js";
 
 dotenv.config({
   path: "./src/.env",

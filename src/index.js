@@ -6,6 +6,7 @@ import connectDB from "./db/db.js";
 import { Server } from "socket.io";
 import {createServer} from 'http'
 import ApiResponse from './utils/apiResonse.js'
+import fs from 'fs'
 
 dotenv.config({
   path: "./src/.env",
@@ -35,15 +36,16 @@ app.post('/video',upload.single('video'),(req,res)=>{
   const file = req.file;
   if(!file)return res.json(new ApiResponse('Please provide a video',{data: null}, false))
     io.emit('process_video',file.filename)
-  console.log('hi')
 
   setTimeout(()=>{
-    return res.json(new ApiResponse('Sucess',{},true))
-  },5000)
+    fs.unlinkSync(`./public/temp/${file.filename}`)
+    return res.json(new ApiResponse('Sucess',{response},true))
+  },10000)
 })
 
-
 io.on('connection',(socket)=>{
+
+  /* Event listener to listen on data emmited from py */
   socket.on('data',(data)=>{
     response = data
   })

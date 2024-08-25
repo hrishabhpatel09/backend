@@ -31,16 +31,17 @@ app.get("/", (req, res) => {
   return res.json({ name: "Hrishabh Patel", msg: "Hello World!:😊" });
 });
 
-
+/* to handle the post request from the client-side */
 app.post('/video',upload.single('video'),(req,res)=>{
+  console.log('Request Recieved from frontend')
   const file = req.file;
   if(!file)return res.json(new ApiResponse('Please provide a video',{data: null}, false))
     io.emit('process_video',file.filename)
 
   setTimeout(()=>{
-    fs.unlinkSync(`./public/temp/${file.filename}`)
+    // fs.unlinkSync(`./public/temp/${file.filename}`)
     return res.json(new ApiResponse('Sucess',{response},true))
-  },10000)
+  },30000)
 })
 
 io.on('connection',(socket)=>{
